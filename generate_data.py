@@ -17,7 +17,7 @@ def main() -> None:
 
     FACTOR_EVERY_ITERATION = 4
     for i in range(MAX_TEST_CASES):
-        arr_size = random.randint(10, 100000)
+        arr_size = random.randint(10, 200000)
         min_value = random.randint(-100, 50) * (i**FACTOR_EVERY_ITERATION)
         max_value = random.randint(50, 100) * (i**FACTOR_EVERY_ITERATION)
 
