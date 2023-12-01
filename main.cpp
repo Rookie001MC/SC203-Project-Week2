@@ -11,6 +11,9 @@ void write_to_csv(std::string filename, const std::vector<std::vector<unsigned l
                   std::vector<std::string> headers);
 void output_table(const std::vector<std::vector<unsigned long long>> &timeTable, std::vector<std::string> headers);
 
+const int maxTestCases      = 1000;
+const std::string resultDir = "results/";
+
 int main()
 {
 
@@ -30,14 +33,13 @@ int main()
     bool runMergeSort             = true;
     bool runBubbleSort            = true;
 
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < maxTestCases; i++)
     {
-        int n = pow(10, i + 1);
 
-        std::string random_filename       = "random_" + std::to_string(n) + ".txt";
-        std::string descending_filename   = "desc_" + std::to_string(n) + ".txt";
-        std::string almostSorted_filename = "almost_sorted_" + std::to_string(n) + ".txt";
-        std::string sorted_filename       = "result_" + std::to_string(n) + ".txt";
+        std::string random_filename       = "random_" + std::to_string(i) + ".txt";
+        std::string descending_filename   = "descending_" + std::to_string(i) + ".txt";
+        std::string almostSorted_filename = "almost_sorted_" + std::to_string(i) + ".txt";
+        std::string sorted_filename       = "ascending_" + std::to_string(i) + ".txt";
 
         read_from_file(random_filename, randomArr);
         read_from_file(descending_filename, descendingArr);
@@ -49,13 +51,21 @@ int main()
         // each row is the array type
         std::vector<std::vector<unsigned long long>> timeTable(4, std::vector<unsigned long long>(8, 0));
         std::cout << "----------------------------" << std::endl;
-        std::cout << "n = " << n << std::endl;
+        std::cout << "test_case = " << i << std::endl;
 
-        if (i >= 4)
+        // These 2 must be turned off if the array size is too large, because these algorithms are recursive
+        // and will cause out-of-memory.
+        if (randomArr.size() >= 100000)
         {
             runEnhancedSelectionSort = false;
             runEnhancedBubbleSort    = false;
         }
+        else
+        {
+            runEnhancedSelectionSort = true;
+            runEnhancedBubbleSort    = true;
+        }
+
         if (runCountingSort)
         {
             std::cout << "Running Counting Sort for ";
@@ -85,7 +95,7 @@ int main()
                 }
 
                 auto start = std::chrono::high_resolution_clock::now();
-                counting_sort(arr, n);
+                counting_sort(arr, arr.size());
                 auto end      = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -204,7 +214,7 @@ int main()
                 }
 
                 auto start = std::chrono::high_resolution_clock::now();
-                enhancedBubbleSort(arr, arr.size(), 0, n - 1);
+                enhancedBubbleSort(arr, arr.size(), 0, arr.size() - 1);
                 auto end      = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -244,7 +254,7 @@ int main()
                 }
 
                 auto start = std::chrono::high_resolution_clock::now();
-                selectionSort(arr, n);
+                selectionSort(arr, arr.size());
                 auto end      = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -284,7 +294,7 @@ int main()
                 }
 
                 auto start = std::chrono::high_resolution_clock::now();
-                insertionSort(arr, n);
+                insertionSort(arr, arr.size());
                 auto end      = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -324,7 +334,7 @@ int main()
                 }
 
                 auto start = std::chrono::high_resolution_clock::now();
-                mergeSort(arr, 0, n - 1);
+                mergeSort(arr, 0, arr.size() - 1);
                 auto end      = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -364,7 +374,7 @@ int main()
                 }
 
                 auto start = std::chrono::high_resolution_clock::now();
-                bubbleSort(arr, n);
+                bubbleSort(arr, arr.size());
                 auto end      = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -376,10 +386,10 @@ int main()
         }
 
         // Write the time table to a csv file
-        std::string filename             = "timeTable_" + std::to_string(n) + ".csv";
+        std::string filename             = "timeTable_" + std::to_string(i) + ".csv";
         std::vector<std::string> headers = {"Random", "Descending", "Almost Sorted", "Sorted"};
 
-        write_to_csv(filename, timeTable, headers);
+        write_to_csv(resultDir + filename, timeTable, headers);
         output_table(timeTable, headers);
     }
 }
