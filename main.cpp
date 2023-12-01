@@ -11,8 +11,9 @@ void write_to_csv(std::string filename, const std::vector<std::vector<unsigned l
                   std::vector<std::string> headers);
 void output_table(const std::vector<std::vector<unsigned long long>> &timeTable, std::vector<std::string> headers);
 
-const int maxTestCases      = 1000;
-const std::string resultDir = "results/";
+const int maxTestCases        = 1000;
+const std::string resultDir   = "results/";
+const std::string testCaseDir = "testcases/";
 
 int main()
 {
@@ -36,10 +37,10 @@ int main()
     for (int i = 0; i < maxTestCases; i++)
     {
 
-        std::string random_filename       = "random_" + std::to_string(i) + ".txt";
-        std::string descending_filename   = "descending_" + std::to_string(i) + ".txt";
-        std::string almostSorted_filename = "almost_sorted_" + std::to_string(i) + ".txt";
-        std::string sorted_filename       = "ascending_" + std::to_string(i) + ".txt";
+        std::string random_filename       = testCaseDir + "random_" + std::to_string(i) + ".txt";
+        std::string descending_filename   = testCaseDir + "descending_" + std::to_string(i) + ".txt";
+        std::string almostSorted_filename = testCaseDir + "almost_sorted_" + std::to_string(i) + ".txt";
+        std::string sorted_filename       = testCaseDir + "ascending_" + std::to_string(i) + ".txt";
 
         read_from_file(random_filename, randomArr);
         read_from_file(descending_filename, descendingArr);
@@ -422,7 +423,13 @@ void write_to_csv(std::string filename, const std::vector<std::vector<unsigned l
         // Write the headers
         for (int i = 0; i < headers.size(); i++)
         {
-            file << headers[i] << ",";
+            if (i == headers.size() - 1)
+            {
+                file << headers[i] << "\n";
+                break;
+            }
+            else
+                file << headers[i] << ",";
         }
         file << "\n";
 
@@ -431,7 +438,13 @@ void write_to_csv(std::string filename, const std::vector<std::vector<unsigned l
         {
             for (int j = 0; j < 4; j++)
             {
-                file << timeTable[j][i] << ",";
+                if (j == 3)
+                {
+                    file << timeTable[j][i] << "\n";
+                    break;
+                }
+                else
+                    file << timeTable[j][i] << ",";
             }
             file << "\n";
         }
@@ -449,7 +462,13 @@ void output_table(const std::vector<std::vector<unsigned long long>> &timeTable,
     // Write the headers
     for (int i = 0; i < headers.size(); i++)
     {
-        std::cout << headers[i] << ",";
+        if (i == headers.size() - 1)
+        {
+            std::cout << headers[i] << "\n";
+            break;
+        }
+        else
+            std::cout << headers[i] << ",";
     }
     std::cout << "\n";
 
@@ -458,7 +477,13 @@ void output_table(const std::vector<std::vector<unsigned long long>> &timeTable,
     {
         for (int j = 0; j < 4; j++)
         {
-            std::cout << timeTable[j][i] << ",";
+            if (j == 3)
+            {
+                std::cout << timeTable[j][i] << "\n";
+                break;
+            }
+            else
+                std::cout << timeTable[j][i] << ",";
         }
         std::cout << "\n";
     }
