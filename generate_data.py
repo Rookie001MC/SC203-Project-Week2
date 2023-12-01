@@ -1,38 +1,32 @@
+import random
 from enum import Enum
 
 import numpy as np
 
+MAX_TEST_CASES = 1000
+TESTCASE_DIR = "testcases"
+
 
 def main() -> None:
-    for i in range(7):
-        n = 10 ** (i + 1)
-        print(f"Generating dataset with {n} elements")
-        min_value = -1500 * (i + 1)
-        max_value = 1500 * (i + 1)
+    mode_filename = [
+        "random",
+        "ascending",
+        "descending",
+        "almost_sorted",
+    ]
 
-        generator = DatasetGenerator(
-            n, min_value, max_value, DatasetGeneratorMode.ASCENDING
-        )
-        generator.generate()
-        generator.write_to_text(f"result_{n}.txt")
+    FACTOR_EVERY_ITERATION = 4
+    for i in range(MAX_TEST_CASES):
+        arr_size = random.randint(10, 100000)
+        min_value = random.randint(-100, 50) * (i**FACTOR_EVERY_ITERATION)
+        max_value = random.randint(50, 100) * (i**FACTOR_EVERY_ITERATION)
 
-        generator = DatasetGenerator(
-            n, min_value, max_value, DatasetGeneratorMode.DESCENDING
-        )
-        generator.generate()
-        generator.write_to_text(f"desc_{n}.txt")
+        for mode in DatasetGeneratorMode:
+            filename = f"{TESTCASE_DIR}/{mode_filename[mode.value]}_{i}.txt"
 
-        generator = DatasetGenerator(
-            n, min_value, max_value, DatasetGeneratorMode.ALMOST_SORTED
-        )
-        generator.generate()
-        generator.write_to_text(f"almost_sorted_{n}.txt")
-
-        generator = DatasetGenerator(
-            n, min_value, max_value, DatasetGeneratorMode.RANDOM
-        )
-        generator.generate()
-        generator.write_to_text(f"random_{n}.txt")
+            generator = DatasetGenerator(arr_size, min_value, max_value, mode)
+            generator.generate()
+            generator.write_to_text(filename)
 
 
 class DatasetGeneratorMode(Enum):
