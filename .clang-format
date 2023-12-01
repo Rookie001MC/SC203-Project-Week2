@@ -1,0 +1,27 @@
+# Loosely based on OpenTelemetry's .clang-format
+# https://github.com/open-telemetry/opentelemetry-cpp/blob/main/.clang-format
+
+Language: Cpp
+BasedOnStyle: Microsoft
+Standard: c++20
+
+# 4 spaces
+IndentWidth: 4
+UseTab: Never
+
+IndentCaseLabels: true
+
+PointerAlignment: Right
+
+AlignOperands: true
+AlignConsecutiveAssignments: true
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: Left
+
+AccessModifierOffset: -2
+
+AllowShortCaseLabelsOnASingleLine: false
+
+KeepEmptyLinesAtTheStartOfBlocks: true
+
+IndentPPDirectives: AfterHash
