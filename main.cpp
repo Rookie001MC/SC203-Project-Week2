@@ -18,7 +18,7 @@ const std::string testCaseDir = "testcases/";
 int main()
 {
 
-    //     system("python3 generate_data.py");
+    system("python3 generate_data.py");
 
     std::vector<int> randomArr;
     std::vector<int> descendingArr;
@@ -33,6 +33,8 @@ int main()
     bool runInsertionSort         = true;
     bool runMergeSort             = true;
     bool runBubbleSort            = true;
+
+    const int maxElementsDisableMemoryIntensiveAlgo = 60000;
 
     for (int i = 0; i < maxTestCases; i++)
     {
@@ -52,14 +54,16 @@ int main()
         // each row is the array type
         std::vector<std::vector<unsigned long long>> timeTable(4, std::vector<unsigned long long>(8, 0));
         std::cout << "----------------------------" << std::endl;
-        std::cout << "test_case = " << i << std::endl;
+        auto n = randomArr.size();
+        printf("test_case = \033[38;5;154m%d\033[0m, n = \033[38;5;154m%zu\033[0m\n", i, n);
 
         // These 2 must be turned off if the array size is too large, because these algorithms are recursive
         // and will cause out-of-memory.
-        if (randomArr.size() >= 100000)
+        if (randomArr.size() >= maxElementsDisableMemoryIntensiveAlgo)
         {
             runEnhancedSelectionSort = false;
             runEnhancedBubbleSort    = false;
+            std::cout << "\033[1;31mEnhancedSelection and EnhancedBubble disabled.\033[0m" << std::endl;
         }
         else
         {
@@ -387,7 +391,7 @@ int main()
         }
 
         // Write the time table to a csv file
-        std::string filename             = "timeTable_" + std::to_string(i) + ".csv";
+        std::string filename             = "timeTable_" + std::to_string(i) + "_" + std::to_string(n) + ".csv";
         std::vector<std::string> headers = {"Random", "Descending", "Almost Sorted", "Sorted"};
 
         write_to_csv(resultDir + filename, timeTable, headers);
@@ -417,7 +421,7 @@ void write_to_csv(std::string filename, const std::vector<std::vector<unsigned l
                   std::vector<std::string> headers)
 {
     std::fstream(file);
-    file.open(filename, std::ios::out | std::ios::app);
+    file.open(filename, std::ios::out | std::ios::trunc);
     if (file.is_open())
     {
         // Write the headers
@@ -425,7 +429,7 @@ void write_to_csv(std::string filename, const std::vector<std::vector<unsigned l
         {
             if (i == headers.size() - 1)
             {
-                file << headers[i] << "\n";
+                file << headers[i];
                 break;
             }
             else
@@ -440,7 +444,7 @@ void write_to_csv(std::string filename, const std::vector<std::vector<unsigned l
             {
                 if (j == 3)
                 {
-                    file << timeTable[j][i] << "\n";
+                    file << timeTable[j][i];
                     break;
                 }
                 else
@@ -464,7 +468,7 @@ void output_table(const std::vector<std::vector<unsigned long long>> &timeTable,
     {
         if (i == headers.size() - 1)
         {
-            std::cout << headers[i] << "\n";
+            std::cout << headers[i];
             break;
         }
         else
@@ -479,7 +483,7 @@ void output_table(const std::vector<std::vector<unsigned long long>> &timeTable,
         {
             if (j == 3)
             {
-                std::cout << timeTable[j][i] << "\n";
+                std::cout << timeTable[j][i];
                 break;
             }
             else
