@@ -3,7 +3,9 @@ from enum import Enum
 
 import numpy as np
 
-MAX_TEST_CASES = 1000
+MAX_TEST_CASES = 1500
+
+
 TESTCASE_DIR = "testcases"
 
 
@@ -15,12 +17,37 @@ def main() -> None:
         "almost_sorted",
     ]
 
-    FACTOR_EVERY_ITERATION = 4
+    FACTOR_EVERY_ITERATION = 0
+    arr_size = 0
     for i in range(MAX_TEST_CASES):
-        arr_size = random.randint(10, 200000)
-        min_value = random.randint(-100, 50) * (i**FACTOR_EVERY_ITERATION)
-        max_value = random.randint(50, 100) * (i**FACTOR_EVERY_ITERATION)
+        if i <= 100:
+            FACTOR_EVERY_ITERATION = 1
+            arr_size = random.randint(1, 25)
+        elif i <= 200:
+            FACTOR_EVERY_ITERATION = 1.3
+            arr_size = random.randint(10, 300)
+        elif i <= 300:
+            FACTOR_EVERY_ITERATION = 1.6
+            arr_size = random.randint(10, 1000)
+        elif i <= 600:
+            FACTOR_EVERY_ITERATION = 2
+            arr_size = random.randint(10, 1500)
+        elif i <= 1000:
+            FACTOR_EVERY_ITERATION = 2.5
+            arr_size = random.randint(10, 7500)
+        elif i <= 1200:
+            FACTOR_EVERY_ITERATION = 3
+            arr_size = random.randint(10, 12500)
+        elif i <= 1500:
+            FACTOR_EVERY_ITERATION = 3.5
+            arr_size = random.randint(10, 100000)
 
+        min_value = int(round(random.randint(-100, 50)) * ((i + 1) * FACTOR_EVERY_ITERATION))
+        max_value = int(round(random.randint(70, 100) * ((i + 1) * FACTOR_EVERY_ITERATION)))
+
+        print(
+            f"Generating test case {i} with size {arr_size}, min value {min_value}, max value {max_value}"
+        )
         for mode in DatasetGeneratorMode:
             filename = f"{TESTCASE_DIR}/{mode_filename[mode.value]}_{i}.txt"
 
