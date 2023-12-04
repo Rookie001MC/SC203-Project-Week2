@@ -15,6 +15,18 @@ const int maxTestCases        = 1000;
 const std::string resultDir   = "results/";
 const std::string testCaseDir = "testcases/";
 
+bool runCountingSort          = true;
+bool runCocktailSort          = true;
+bool runEnhancedSelectionSort = true;
+bool runEnhancedBubbleSort    = true;
+bool runSelectionSort         = true;
+bool runInsertionSort         = true;
+bool runMergeSort             = true;
+bool runBubbleSort            = true;
+bool runQuickSort             = true;
+
+const int enabledAlgos = runCountingSort + runCocktailSort + runEnhancedSelectionSort + runEnhancedBubbleSort +
+                         runSelectionSort + runInsertionSort + runMergeSort + runBubbleSort + runQuickSort;
 int main()
 {
 
@@ -24,16 +36,6 @@ int main()
     std::vector<int> descendingArr;
     std::vector<int> almostSortedArr;
     std::vector<int> sortedArr;
-
-    bool runCountingSort          = true;
-    bool runCocktailSort          = true;
-    bool runEnhancedSelectionSort = true;
-    bool runEnhancedBubbleSort    = true;
-    bool runSelectionSort         = true;
-    bool runInsertionSort         = true;
-    bool runMergeSort             = true;
-    bool runBubbleSort            = true;
-    bool runQuickSort             = true;
 
     const int maxElementsDisableMemoryIntensiveAlgo = 60000;
 
@@ -478,7 +480,7 @@ void write_to_csv(std::string filename, const std::vector<std::vector<unsigned l
         file << "\n";
 
         // Write the time table
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < enabledAlgos; i++)
         {
             for (int j = 0; j < 4; j++)
             {
@@ -517,7 +519,7 @@ void output_table(const std::vector<std::vector<unsigned long long>> &timeTable,
     std::cout << "\n";
 
     // Write the time table
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < enabledAlgos; i++)
     {
         for (int j = 0; j < 4; j++)
         {
