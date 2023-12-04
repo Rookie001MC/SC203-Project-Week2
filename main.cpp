@@ -33,6 +33,7 @@ int main()
     bool runInsertionSort         = true;
     bool runMergeSort             = true;
     bool runBubbleSort            = true;
+    bool runQuickSort             = true;
 
     const int maxElementsDisableMemoryIntensiveAlgo = 60000;
 
@@ -387,6 +388,45 @@ int main()
 
                 // Append the time to the time table
                 timeTable[j][7] = (duration.count());
+            }
+        }
+
+        if (runQuickSort)
+        {
+            // Run Quick Sort for 4 cases
+            std::cout << "Running Quick Sort for ";
+            for (int j = 0; j < 4; j++)
+            {
+                std::vector<int> arr;
+                if (j == 0)
+                {
+                    arr = randomArr;
+                    std::cout << "random array" << std::endl;
+                }
+                else if (j == 1)
+                {
+                    arr = descendingArr;
+                    std::cout << "descending array" << std::endl;
+                }
+                else if (j == 2)
+                {
+                    arr = almostSortedArr;
+                    std::cout << "almost sorted array" << std::endl;
+                }
+                else if (j == 3)
+                {
+                    arr = sortedArr;
+                    std::cout << "sorted array" << std::endl;
+                }
+
+                auto start = std::chrono::high_resolution_clock::now();
+                quickSort(arr, 0, arr.size() - 1);
+                auto end      = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+                std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
+
+                // Append the time to the time table
+                timeTable[j][8] = (duration.count());
             }
         }
 
