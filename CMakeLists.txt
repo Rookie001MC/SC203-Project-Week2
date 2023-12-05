@@ -12,4 +12,5 @@ add_executable(${PROJECT_NAME}
         sort_algos/counting_cocktail.cpp
         sort_algos/traditionals.cpp
         sort_algos/sorting_algo.hpp
+        sort_algos/quicksort.cpp
  )
