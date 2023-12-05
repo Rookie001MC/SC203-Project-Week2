@@ -10,8 +10,9 @@ void read_from_file(std::string filename, std::vector<int> &arr);
 void write_to_csv(std::string filename, const std::vector<std::vector<unsigned long long>> &timeTable,
                   std::vector<std::string> headers);
 void output_table(const std::vector<std::vector<unsigned long long>> &timeTable, std::vector<std::string> headers);
+int read_max_test_case(std::string filename);
 
-const int maxTestCases        = 1000;
+const int maxTestCases        = read_max_test_case("config/maxTestCaseCount.cfg");
 const std::string resultDir   = "results/";
 const std::string testCaseDir = "testcases/";
 
@@ -438,6 +439,12 @@ int main()
 
         write_to_csv(resultDir + filename, timeTable, headers);
         output_table(timeTable, headers);
+
+        // Cleanup the array
+        randomArr.clear();
+        descendingArr.clear();
+        almostSortedArr.clear();
+        sortedArr.clear();
     }
 }
 
@@ -532,5 +539,22 @@ void output_table(const std::vector<std::vector<unsigned long long>> &timeTable,
                 std::cout << timeTable[j][i] << ",";
         }
         std::cout << "\n";
+    }
+}
+
+int read_max_test_case(std::string filename)
+{
+    std::ifstream file(filename);
+    if (!file.is_open())
+    {
+        std::cout << "Config file unable to open!" << std::endl;
+        exit(1);
+    }
+    else
+    {
+        std::string line;
+        // First line is the max test case
+        std::getline(file, line);
+        return std::stoi(line);
     }
 }
