@@ -446,6 +446,9 @@ int main()
         almostSortedArr.clear();
         sortedArr.clear();
     }
+
+    std::cout << "Analyzing data..." << std::endl;
+    system("python3 analyze_data.py");
 }
 
 void read_from_file(std::string filename, std::vector<int> &arr)
