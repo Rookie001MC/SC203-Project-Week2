@@ -3,9 +3,25 @@ from enum import Enum
 
 import numpy as np
 
-MAX_TEST_CASES = 1500
+
+def read_config(filename: str):
+    with open(filename, "r") as f:
+        try:
+            count = int(f.readline())
+        except ValueError:
+            print("Invalid value for MAX_TEST_CASES")
+            exit(1)
+        return count
 
 
+class DatasetGeneratorMode(Enum):
+    RANDOM = 0
+    ASCENDING = 1
+    DESCENDING = 2
+    ALMOST_SORTED = 3
+
+
+MAX_TEST_CASES = read_config("config/maxTestCaseCount.cfg")
 TESTCASE_DIR = "testcases"
 
 
@@ -17,33 +33,21 @@ def main() -> None:
         "almost_sorted",
     ]
 
-    FACTOR_EVERY_ITERATION = 0
+    FACTOR_EVERY_ITERATION = 1
     arr_size = 0
-    for i in range(MAX_TEST_CASES):
-        if i <= 100:
-            FACTOR_EVERY_ITERATION = 1
-            arr_size = random.randint(1, 25)
-        elif i <= 200:
-            FACTOR_EVERY_ITERATION = 1.3
-            arr_size = random.randint(10, 300)
-        elif i <= 300:
-            FACTOR_EVERY_ITERATION = 1.6
-            arr_size = random.randint(10, 1000)
-        elif i <= 600:
-            FACTOR_EVERY_ITERATION = 2
-            arr_size = random.randint(10, 1500)
-        elif i <= 1000:
-            FACTOR_EVERY_ITERATION = 2.5
-            arr_size = random.randint(10, 7500)
-        elif i <= 1200:
-            FACTOR_EVERY_ITERATION = 3
-            arr_size = random.randint(10, 12500)
-        elif i <= 1500:
-            FACTOR_EVERY_ITERATION = 3.5
-            arr_size = random.randint(10, 100000)
 
-        min_value = int(round(random.randint(-100, 50)) * ((i + 1) * FACTOR_EVERY_ITERATION))
-        max_value = int(round(random.randint(70, 100) * ((i + 1) * FACTOR_EVERY_ITERATION)))
+    for i in range(MAX_TEST_CASES):
+        if i % int((MAX_TEST_CASES / 80)) == 0:
+            FACTOR_EVERY_ITERATION += 2
+        print(100 * FACTOR_EVERY_ITERATION)
+        arr_size = random.randint(10, 100 * FACTOR_EVERY_ITERATION)
+
+        min_value = int(
+            round(random.randint(-10, 6)) * (((i + 1)) + FACTOR_EVERY_ITERATION / 2)
+        )
+        max_value = int(
+            round(random.randint(7, 10)) * (((i + 1)) + FACTOR_EVERY_ITERATION / 2)
+        )
 
         print(
             f"Generating test case {i} with size {arr_size}, min value {min_value}, max value {max_value}"
@@ -54,13 +58,6 @@ def main() -> None:
             generator = DatasetGenerator(arr_size, min_value, max_value, mode)
             generator.generate()
             generator.write_to_text(filename)
-
-
-class DatasetGeneratorMode(Enum):
-    RANDOM = 0
-    ASCENDING = 1
-    DESCENDING = 2
-    ALMOST_SORTED = 3
 
 
 class DatasetGenerator:
