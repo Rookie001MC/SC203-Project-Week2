@@ -50,7 +50,9 @@ def main() -> None:
         )
 
         print(
-            f"Generating test case {i} with size {arr_size}, min value {min_value}, max value {max_value}"
+            f"Generating test case {i} with size {arr_size}, min value {min_value}, max value {max_value}",
+            end="\r",
+            flush=True,
         )
         for mode in DatasetGeneratorMode:
             filename = f"{TESTCASE_DIR}/{mode_filename[mode.value]}_{i}.txt"
