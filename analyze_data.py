@@ -39,9 +39,16 @@ def main():
         for _ in range(len(list_arr_type))
     ]
 
+    print("Processing:", end="\r", flush=True)
     for file in file_name:
-        print("Processing file:", file, end="\r", flush=True)
+        test_case_no = file.split("_")[1]
         element_count = file.split("_")[2].split(".")[0]
+
+        print(
+            f"Test Case No: {test_case_no} \t Element Count: {element_count}",
+            end="\r",
+            flush=True,
+        )
 
         df_cur_file = pd.read_csv(RESULT_DIRECTORY + file)
 
@@ -57,21 +64,32 @@ def main():
 
     for arr_type in list_arr_type:
         plot_graph(df_list_of_arr_type[list_arr_type.index(arr_type)], arr_type)
+        export_csv(df_list_of_arr_type[list_arr_type.index(arr_type)], arr_type)
+
+    print("Graphs saved in graphs/ folder.")
 
 
 def plot_graph(df: pd.DataFrame, arr_type: str):
-    plt.figure(figsize=(6, 6))
+    if not os.path.exists("graphs"):
+        os.makedirs("graphs")
+    plt.figure(figsize=(10, 10))
     plt.title(f"Time Complexity of Sorting Algorithms on {arr_type} Array")
     plt.xlabel("Number of Elements")
     plt.ylabel("Time Taken (in seconds)")
 
     for col in df.columns[1:]:
         plt.scatter(
-            df["element_count"], df[col], label=col.replace("_", " ").title(), s=5
+            df["element_count"], df[col], label=col.replace("_", " ").title(), s=1
         )
 
-    plt.legend()
+    plt.legend(fontsize=15, markerscale=10)
     plt.savefig(f"graphs/{arr_type}.png")
+
+
+def export_csv(df: pd.DataFrame, arr_type: str):
+    if not os.path.exists("graphs"):
+        os.makedirs("graphs")
+    df.to_csv(f"graphs/{arr_type}.csv", index=False)
 
 
 if __name__ == "__main__":
