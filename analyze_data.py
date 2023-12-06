@@ -60,7 +60,7 @@ def main():
                 )
                 df_list_of_arr_type[i].loc[
                     int(element_count), algo.lower().replace(" ", "_")
-                ] = float(df_cur_arr_type[j] / 1000)
+                ] = float(df_cur_arr_type[j] / 1000000)
 
     for arr_type in list_arr_type:
         plot_graph(df_list_of_arr_type[list_arr_type.index(arr_type)], arr_type)
