@@ -27,7 +27,7 @@ systemctl --user stop pipewire pipewire-pulse
 # Compile and start the benchmark
 echo "Compiling the benchmark."
 mkdir -p "./build"
-if cmake --build ./build --target all -j 18 --; then
+if cmake --build ./build --target all -j 18 --config MinSizeRel -- ; then
 	echo "Starting benchmark."
 	./benchmark_sorting_algos
 else
